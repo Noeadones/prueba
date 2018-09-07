@@ -1,9 +1,9 @@
 /**ROLANDO */
 object rolando {
 	var nivel = 3
-	var hechizoPreferido
+	var hechizoPreferido = hechizoBasico
 	method nivelHechizeria() {
-		nivel = 3 * hechizoPreferido.poder() + fuerzaOscura
+		nivel = 3 * hechizoPreferido.poder() + fuerzaOscura.valor()
 	}
 	
 	method hechizoPreferido(_hechizoPreferido){
