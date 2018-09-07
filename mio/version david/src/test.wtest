@@ -1,0 +1,43 @@
+import example.*
+
+describe "Test del Punto 1 Hechiceria" {
+
+	test "conocer nivel de hechiceria de rolando igual a 56" {
+		rolando.calcularNivelHechizos() 
+		assert.equals(56,rolando.nivelHechiceria())
+	}
+
+	test "cambio en el hechizo preferido, nuevo nivel de 125" {
+		rolando.cambiarPreferido("espectro superrecontramalefico muajajaja")
+		rolando.calcularNivelHechizos() 
+		assert.equals(125,rolando.nivelHechiceria())
+	}
+
+	test "cambio de hechizo preferido por normal, nuevo nivel de hechizo 35" {
+		rolando.cambiarPrefPorBasico()
+		rolando.calcularNivelHechizos() 
+		assert.equals(35,rolando.nivelHechiceria())
+	}
+	
+	test "ocurre un eclipse, nuevo nivel de hechizo 61" {
+		suceso.eclipse()
+		rolando.calcularNivelHechizos() 
+		assert.equals(61,rolando.nivelHechiceria())
+	}
+	
+	test "saber si espectro malefico es poderoso" {
+		assert.that(espectroMalefico.esPoderoso())
+	}
+	
+	test "cambio de nombre de espectro malefico a pepe" {
+		espectroMalefico.nombrePreferido("pepe")
+		assert.notThat(espectroMalefico.esPoderoso())
+	}
+
+	test "saber si el hechizo basico es poderoso" {
+		assert.notThat(hechizoBasico.esPoderoso())
+	}	
+
+	
+}
+	

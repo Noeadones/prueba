@@ -1,0 +1,75 @@
+import example.*
+
+describe "Test punto 3 lucha y hechiceria avanzada"{
+	test "rolando esta cargado" {
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.agregarArtefactos(mascaraOscura)
+		rolando.agregarArtefactos(armadura)
+		rolando.agregarArtefactos(espejo)
+		assert.that(rolando.estaCargado())
+	
+	}
+
+	test "rolando esta no esta cargado sin armadura" {
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.agregarArtefactos(mascaraOscura)
+		rolando.agregarArtefactos(armadura)
+		rolando.agregarArtefactos(espejo)
+		rolando.removerArtefactos(armadura)
+		assert.notThat(rolando.estaCargado())
+	
+	}
+	
+	test "calcular nivel lucha con armadura sin refuerzo y espejo igual a 20"{
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(mascaraOscura)
+		collarDivino.cantidadDePerlas(5)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.agregarArtefactos(armadura)
+		rolando.agregarArtefactos(espejo)
+		rolando.calcularNivelLucha() 
+		assert.equals(20,rolando.nivelLucha())
+	}
+	
+	test "calcular nivel lucha de armadura con refuerzo de bendicion, igual a 58"{
+		rolando.agregarArtefactos(armadura)
+		armadura.calcularRefuerzo(bendicion)
+		assert.equals(58,armadura.poderLucha())
+	}
+	
+	test "calcular nivel lucha de armadura con refuerzo de cota, igual a 3"{
+		rolando.agregarArtefactos(armadura)
+		armadura.calcularRefuerzo(cota)
+		assert.equals(3,armadura.poderLucha())
+	}
+	
+	test "calcular nivel lucha de armadura con refuerzo de hechizo basico, igual a 12"{
+		rolando.cambiarPrefPorBasico()
+		rolando.agregarArtefactos(armadura)
+		armadura.calcularRefuerzo(hechizo)
+		assert.equals(12,armadura.poderLucha())
+	}
+	
+	test "calcular nivel lucha de armadura con refuerzo de hechizo espectro, igual a 19"{
+		rolando.agregarArtefactos(armadura)
+		armadura.calcularRefuerzo(hechizo)
+		assert.equals(19,armadura.poderLucha())
+	}
+	
+	test "calcular nivel lucha espejo, igual a 1"{
+		rolando.agregarArtefactos(espejo)
+		rolando.calcularNivelLucha()
+		assert.equals(1,rolando.nivelLucha())
+	}
+	
+	test "calcular nivel de hechiceria con libro de hechizos, igual a 56"{
+		libroDeHechizos.agregarHechizos(espectroMalefico)
+		libroDeHechizos.agregarHechizos(hechizoBasico)
+		rolando.cambiarPrefPorLibroHechizos()
+		rolando.calcularNivelHechizos()
+		assert.equals(56,rolando.nivelHechiceria())
+	}
+	
+}

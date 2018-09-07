@@ -1,0 +1,53 @@
+import example.*
+
+describe "Test del punto 2 Lucha" {
+	
+ 	test "nivel de Lucha base"{
+		
+		rolando.calcularNivelLucha() 
+		assert.equals(1,rolando.nivelLucha())
+	}
+
+	test "nivel de Lucha total con todos los artefactos igual a 13 con collar 5"{
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(mascaraOscura)
+		collarDivino.cantidadDePerlas(5)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.calcularNivelLucha() 
+		assert.equals(13,rolando.nivelLucha())
+	}
+	
+	test "nivel de Lucha total con todos los artefactos igual a 11 con collar 3"{
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(mascaraOscura)
+		collarDivino.cantidadDePerlas(3)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.calcularNivelLucha() 
+		assert.equals(11,rolando.nivelLucha())
+	}
+	
+	test "cambio de valor base de lucha a 8, total igual a 20"{
+		rolando.nivelLucha(8)
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(mascaraOscura)
+		collarDivino.cantidadDePerlas(3)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.calcularNivelLucha() 
+		assert.equals(18,rolando.nivelLucha())
+	}
+	
+	test "valor de poder de lucha de mascara oscura igual a 5"{
+		suceso.eclipse()
+		assert.equals(5,mascaraOscura.puntosLucha())
+	}
+	
+	test "valor de poder de lucha quitando mascara oscura"{
+		rolando.agregarArtefactos(espadaDelDestino)
+		rolando.agregarArtefactos(mascaraOscura)
+		collarDivino.cantidadDePerlas(3)
+		rolando.agregarArtefactos(collarDivino)
+		rolando.removerArtefactos(mascaraOscura)
+		rolando.calcularNivelLucha() 
+		assert.equals(7,rolando.nivelLucha())
+	}
+}
