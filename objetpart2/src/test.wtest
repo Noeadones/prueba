@@ -1,0 +1,170 @@
+import rolando.*
+import hechizos.*
+import fuerzaOscura.*
+import artefactos.*
+import refuerzos.*
+
+describe "Tests TP_Objetos primera entrega" {
+	 
+	var espectroMalefico = new Logos (nombre = "espectro Malefico", multiplicador = 1)
+	const rolando = new Personaje (hechizoPreferido = espectroMalefico)
+	var  espadaDelDestino = new Arma()
+	var  collarDivino = new CollarDivino ()
+	var  mascaraOscura = new MascaraOscura (1)
+	
+	method agregar(_personaje){
+		_personaje.agregarArtefacto(espadaDelDestino)
+		_personaje.agregarArtefacto(collarDivino)
+		_personaje.agregarArtefacto(mascaraOscura)
+	}
+	
+	// Punto 1
+	test "Conocer el nivel de hechicería de Rolando" {
+		assert.equals(56,rolando.nivelHechiceria())
+	}
+	
+	test "Cambiar el nombre del espectro maléfico a \"espectro superrecontramalefico muajajaja\".
+	Conocer el nivel de hechicería de Rolando" {
+		rolando.cambiarNombrePreferido("espectro superrecontramalefico muajajaja")
+		assert.equals(125,rolando.nivelHechiceria())
+	}
+	
+	test "Cambiar el hechizo preferido de Rolando para que sea el hechizo básico.
+	Conocer el nivel de hechicería de Rolando."{
+		rolando.cambiarHechizoPreferido(hechizoBasico)
+		assert.equals(35,rolando.nivelHechiceria())
+	}
+	
+	test "Hacer que ocurra un eclipse. Conocer el nivel de hechicería de Rolando." {
+		fuerzaOscura.eclipse()
+		assert.equals(61,rolando.nivelHechiceria())
+	}
+	
+	test "Saber si el espectro maléfico es poderoso."{
+		assert.that(rolando.hechizoPreferido().poderoso())
+	}
+	
+	test "Cambiar el nombre del espectro maléfico a \"pepe\".Saber si el espectro maléfico es poderoso." {
+		rolando.cambiarNombrePreferido("pepe")
+		assert.notThat(rolando.hechizoPreferido().poderoso())
+	}
+	
+	test "Saber si el hechizo básico es poderoso." {
+		assert.notThat(hechizoBasico.poderoso())
+	}
+	
+	// Punto 2
+	
+	test "Eliminar todos los artefactos de Rolando. Conocer la habilidad para la lucha de Rolando." {
+		self.agregar(rolando)
+		rolando.limpiarArtefactos()
+		assert.equals(1,rolando.habilidadLucha())
+	}
+	
+	test "Conocer la habilidad para la lucha de Rolando con todos los artefactos." {
+		self.agregar(rolando)
+		assert.equals(13,rolando.habilidadLucha())
+	}
+	
+	test "Cambiar la cantidad de perlas del collar divino a 3. Conocer la habilidad para la lucha de Rolando con todos los artefactos." {
+		collarDivino.perlas(3)
+		self.agregar(rolando)
+		assert.equals(11,rolando.habilidadLucha())
+	}
+	
+	test "Cambiar el valor base para la lucha de Rolando a 8. Conocer la habilidad para la lucha de Rolando con todos los artefactos." {
+		
+		rolando.habilidadLuchaBase(8)
+		self.agregar(rolando)
+		assert.equals(20,rolando.habilidadLucha())
+	}
+	
+	test "Hacer que ocurra un eclipse. Preguntar por el valor de lucha de la máscara oscura." {
+		fuerzaOscura.eclipse()
+		assert.equals(5,mascaraOscura.unidadesDeLucha(rolando))
+	}
+	
+	test "Eliminar la máscara oscura de los artefactos de Rolando. Conocer la habilidad para la lucha de Rolando." {
+		self.agregar(rolando)
+		rolando.quitarArtefacto(mascaraOscura)
+		assert.equals(9,rolando.habilidadLucha())
+	}
+	
+	test "Conocer el valor de lucha con una mascara para nada oscura con indice 0"{
+		const mascara = new MascaraOscura (0)
+		assert.equals(4,mascara.unidadesDeLucha(rolando))
+	}
+	
+	test "Conocer el valor de lucha con una mascara para nada oscura con indice 0 de valor minimo 2"{
+		const mascara = new MascaraOscura (0)
+		mascara.valorMinimo(2)
+		assert.equals(2,mascara.unidadesDeLucha(rolando))
+	}
+	
+	// Punto 3
+	
+	test "Saber si Rolando está cargado" {
+		self.agregar(rolando)
+		const armadura = new Armadura ()
+
+		#{armadura,espejoFantastico}.forEach{_art=>rolando.agregarArtefacto(_art)}
+		assert.that(rolando.estaCargado())
+	}
+	
+	test "Hacer que Rolando se saque la armadura. Saber si Rolando está cargado." {
+		self.agregar(rolando)
+		rolando.agregarArtefacto(espejoFantastico)
+		assert.notThat(rolando.estaCargado())
+	}
+	
+	test "Saber cuánta habilidad para la lucha tiene Rolando." {
+		self.agregar(rolando)
+		const armadura = new Armadura ()
+		
+		#{armadura,espejoFantastico}.forEach{_art=>rolando.agregarArtefacto(_art)}
+		assert.equals(20,rolando.habilidadLucha())
+	}
+	
+	test "Saber cuál es la habilidad para la lucha de la armadura de Rolando si tiene una bendición de refuerzo" {
+		self.agregar(rolando)
+		const armadura = new Armadura ()
+		const bendicion = new Bendicion()
+		armadura.agregarRefuerzo(bendicion)
+		assert.equals(58,armadura.unidadesDeLucha(rolando))
+	}
+	
+	test "Saber cuál es la habilidad para la lucha de la armadura de Rolando si tiene una cota de malla de refuerzo" {
+		const armadura = new Armadura ()
+		const cotaDeMalla = new CotaDeMalla()
+		armadura.agregarRefuerzo(cotaDeMalla)
+		assert.equals(3,armadura.unidadesDeLucha(rolando))
+	}
+	
+	test "Saber cuál es la habilidad para la lucha de la armadura de Rolando si tiene el hechizo básico de refuerzo" {
+		const armadura = new Armadura ()
+		const hechizo = new Hechizo()
+		armadura.agregarRefuerzo(hechizo)
+		assert.equals(12,armadura.unidadesDeLucha(rolando))
+	}
+	
+	test "Saber cuál es la habilidad para la lucha de la armadura de Rolando si tiene el hechizo espectro maléfico de refuerzo" {
+		const armadura = new Armadura ()
+		const hechizo = new Hechizo()
+		hechizo.hechizo(espectroMalefico)
+		armadura.agregarRefuerzo(hechizo)
+		assert.equals(19,armadura.unidadesDeLucha(rolando))
+	}
+	
+	test "Eliminar todos los artefactos de Rolando. Incorporar solamente el espejo.Saber cuál es la habilidad para la lucha de Rolando." {
+		rolando.limpiarArtefactos()
+		rolando.agregarArtefacto(espejoFantastico)
+		assert.equals(1,rolando.habilidadLucha())
+	}
+	
+	test "Reemplazar al hechizo preferido por un libro de hechizos que contenga el espectro maléfico (con nombre “espectro maléfico”) y al hechizo básico. Saber cuál es el nivel de hechicería de Rolando." {
+		const libroDeHechizos = new LibroDeHechizos()
+		#{hechizoBasico, espectroMalefico}.forEach{_hechizo=>libroDeHechizos.escribirHechizo(_hechizo)}
+		rolando.hechizoPreferido(libroDeHechizos)
+		assert.equals(56,rolando.nivelHechiceria())
+	}
+}
