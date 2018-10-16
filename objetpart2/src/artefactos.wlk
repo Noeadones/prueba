@@ -2,36 +2,38 @@ import fuerzaOscura.*
 import hechizos.*
 import refuerzos.*
 import rolando.*
+class UserException inherits Exception { }
 
-class Arma {
+class Artefacto {
 	
-	var unidadesDeLucha = 3
-	method costo (_) = unidadesDeLucha*5
-	method unidadesDeLucha(_persona) = unidadesDeLucha
-	
- 	method puedeComprar(_persona){
-		if (_persona.dinero()>self.costo(_persona)){
-			_persona.pagar(self.costo(_persona))
-			_persona.agregarArtefacto(self)
-		}
-	}
-	 
-}
-
-class CollarDivino {
-	
-	var property perlas = 5
-	method costo(_) = 2*perlas
-	method unidadesDeLucha(_persona) = perlas
+	method costo(_)
+	method unidadesDeLucha(_persona)
 	method puedeComprar(_persona){
 		if (_persona.dinero()>self.costo(_persona)){
 			_persona.pagar(self.costo(_persona))
 			_persona.agregarArtefacto(self)
 		}
+		else {
+			 throw new UserException("No hay dinero suficiente")
+		}
 	}
 }
 
-class MascaraOscura {
+class Arma inherits Artefacto {
+	
+	var unidadesDeLucha = 3
+	override method costo (_) = unidadesDeLucha*5
+	override method unidadesDeLucha(_persona) = unidadesDeLucha	 
+}
+
+class CollarDivino inherits Artefacto {
+	
+	var property perlas = 5
+	override method costo(_) = 2*perlas
+	override method unidadesDeLucha(_persona) = perlas
+}
+
+class MascaraOscura inherits Artefacto {
 	var property valorMinimo = 4
 	var indice
 	
@@ -39,23 +41,17 @@ class MascaraOscura {
 		indice = _indice
 	}
 	
-	method costo(_) = 0
-	method unidadesDeLucha(_persona) {
+	override method costo(_) = 0
+	override method unidadesDeLucha(_persona) {
 		return valorMinimo.max((fuerzaOscura.valor()/2)*indice)
-	}
-		method puedeComprar(_persona){
-		if (_persona.dinero()>self.costo(_persona)){
-			_persona.pagar(self.costo(_persona))
-			_persona.agregarArtefacto(self)
-		}
 	}
 }
 // Punto 3
-class Armadura {
+class Armadura inherits Artefacto{
 	
 	var unidadesDeLucha = 2
 	var refuerzo
-	var valorBase = 2
+	var property valorBase = 2
 	
 	
 	method agregarRefuerzo(_refuerzo) {
@@ -64,8 +60,7 @@ class Armadura {
 	method eliminarRefuerzo() {
 		refuerzo = null
 	}		
-	method unidadesDeLucha(_persona) = unidadesDeLucha + self.diferenciaBonus(_persona)
-	
+	override method unidadesDeLucha(_persona) = unidadesDeLucha + self.diferenciaBonus(_persona)
 	method diferenciaBonus(_persona){
 		if (refuerzo != null){
 			return refuerzo.bonus(_persona)
@@ -74,33 +69,24 @@ class Armadura {
 		 	return 0
 		 } 
 	}
-	
-	method costo (_) = if (refuerzo != null) refuerzo.valor(self) else valorBase
-	
-	method puedeComprar(_persona){
-		if (_persona.dinero()>self.costo(_persona)){
-			_persona.pagar(self.costo(_persona))
-			_persona.agregarArtefacto(self)
+	override method costo (_) { 
+		if (refuerzo != null){
+			return refuerzo.valor(self) 
 		}
+		else {return valorBase }
 	}
-	
 	
 }
 
-object espejoFantastico {
+object espejoFantastico inherits Artefacto {
 	
-	method costo(_) = 90
-	method unidadesDeLucha(_persona) {
+	const precio = 90
+	override method costo(_) = precio
+	override method unidadesDeLucha(_persona) {
 		if(_persona.unicoArtefacto(self)) {
 			return 0
 		} else 
 			{ return _persona.artefactoMasPoderoso().unidadesDeLucha(_persona) 
-		}
-	}
-		method puedeComprar(_persona){
-		if (_persona.dinero()>self.costo(_persona)){
-			_persona.pagar(self.costo(_persona))
-			_persona.agregarArtefacto(self)
 		}
 	}
 }

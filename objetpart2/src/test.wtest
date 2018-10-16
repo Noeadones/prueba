@@ -128,7 +128,7 @@ describe "Tests TP_Objetos primera entrega" {
 	test "Saber cuál es la habilidad para la lucha de la armadura de Rolando si tiene una bendición de refuerzo" {
 		self.agregar(rolando)
 		const armadura = new Armadura ()
-		const bendicion = new Bendicion()
+
 		armadura.agregarRefuerzo(bendicion)
 		assert.equals(58,armadura.unidadesDeLucha(rolando))
 	}

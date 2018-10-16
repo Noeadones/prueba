@@ -3,6 +3,8 @@ import fuerzaOscura.*
 import artefactos.*
 import refuerzos.*
 
+class UserException inherits Exception { }
+
 class Personaje {
 
 	var property nivelBase = 3

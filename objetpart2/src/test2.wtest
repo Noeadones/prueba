@@ -1,6 +1,68 @@
+import rolando.*
+import hechizos.*
+import fuerzaOscura.*
+import artefactos.*
+import refuerzos.*
 
-test "testX" {
+describe "test punto 4" {
+	
+	const alacachula = new Logos (nombre = "alacachula cachicomula", multiplicador = 1)
+	const xenia = new Personaje (hechizoPreferido = alacachula)
+	const thor = new Personaje (hechizoPreferido = hechizoBasico)
+	const loki = new Personaje (hechizoPreferido = hechizoBasico, dinero = 5)
+	
+	
+	test "conocer precio de alacachula igual a 22" {
+		assert.equals(22,alacachula.precio())
+	}
+	
+	test "xenia canjea hechizo basico, cantidad de monedas 22"{
+		xenia.comprar(hechizoBasico)
+		assert.equals(100,xenia.dinero())
+	}
 
-	assert.that(true)
+	test "thor canjea hechizo basico por alacachamula, cantidad de monedas 83"{
+		thor.comprar(alacachula)
+		assert.equals(83,thor.dinero())
+	}
 
+	test "thor canjea dos veces hechizo basico , cantidad de monedas 90"{
+		thor.comprar(hechizoBasico)
+		thor.comprar(hechizoBasico)
+		assert.equals(90,thor.dinero())
+	}
+	
+	test "loki comienza con 5 monedas y no puede comprar alacachamula"{		
+		assert.throwsExceptionLike(new UserException("No hay dinero suficiente"),{loki.comprar(alacachula)})
+	}
+	
+	test "xenia compra artefactos, cantidad de monedas 70"{
+		xenia.comprar(new Arma())
+		xenia.comprar(new CollarDivino())
+		xenia.comprar(new Armadura())
+		xenia.comprar(new Armadura (refuerzo = new CotaDeMalla (bonus = 5)))
+		assert.equals(70.5,xenia.dinero())
+	}
+	test "cantidad de artefactos igual a 4"{
+		xenia.comprar(new Arma())
+		xenia.comprar(new CollarDivino())
+		xenia.comprar(new Armadura())
+		xenia.comprar(new Armadura (refuerzo = new CotaDeMalla (bonus = 5)))
+		assert.equals(4,xenia.artefactos().size())
+	}
+	test "thor compra armaduras con bendicion y hechizo de alacachula, cantidad de monedas = 74"{
+		xenia.comprar(new Armadura(refuerzo = bendicion))
+		xenia.comprar(new Armadura(refuerzo = new Hechizo(hechizo = alacachula)))
+		assert.equals(74,xenia.dinero())
+	}
+	test "loki comienza con 5 monedas y no puede comprar espejo del fantastico"{		
+		assert.throwsException({loki.comprar(espejoFantastico)})
+	}
+	test "xenia compra libro de hechizos con hechizo basico y alacachula"{
+		const libroDeHechizos = new LibroDeHechizos ()
+		libroDeHechizos.escribirHechizo(hechizoBasico)
+		libroDeHechizos.escribirHechizo(alacachula)
+		xenia.comprar(libroDeHechizos)
+		assert.equals(69,xenia.dinero())
+	}
 }

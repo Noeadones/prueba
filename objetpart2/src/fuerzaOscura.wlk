@@ -1,3 +1,10 @@
+import rolando.*
+import hechizos.*
+import artefactos.*
+import refuerzos.*
+
+
+
 object fuerzaOscura {
 	
 	var property valor = 5

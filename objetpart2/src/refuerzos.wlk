@@ -1,4 +1,9 @@
+import rolando.*
 import hechizos.*
+import fuerzaOscura.*
+import artefactos.*
+
+
 
 class CotaDeMalla {
 	var property bonus = 1
@@ -6,7 +11,7 @@ class CotaDeMalla {
 	method valor(_) = bonus/2
 }
 
-class Bendicion {
+object bendicion {
 	
 	method bonus(_persona) = _persona.nivelHechiceria()
 	method valor(_persona) = _persona.valorBase()
@@ -17,5 +22,5 @@ class Hechizo {
 	var property hechizo = hechizoBasico
 	
 	method bonus(_) = hechizo.poder()
-	method valor(_persona) = _persona.valorbase() + hechizo.poder()
+	method valor(_persona) = _persona.valorBase() + hechizo.poder()
 }
