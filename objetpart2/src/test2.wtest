@@ -10,6 +10,24 @@ describe "test punto 4" {
 	const xenia = new Personaje (hechizoPreferido = alacachula)
 	const thor = new Personaje (hechizoPreferido = hechizoBasico)
 	const loki = new Personaje (hechizoPreferido = hechizoBasico, dinero = 5)
+	const mockHnos = new Comerciante(condicionImpositiva = independiente)
+	const espada = new Arma(fechaDeCompra = fechaActual.hoy().minusDays(50))
+	const collar = new CollarDivino()
+	const armadura = new Armadura()
+	const armaduraConCota = new Armadura (refuerzo = new CotaDeMalla (bonus = 5))
+	const armaduraBendicion = new Armadura (refuerzo = bendicion)
+	const armaduraHechizo = new Armadura(refuerzo = new Hechizo(hechizo = alacachula))
+	
+	fixture{
+		mockHnos.agregarHechizo(alacachula)
+		mockHnos.agregarHechizo(hechizoBasico)
+		mockHnos.agregarArtefacto(espada)
+		mockHnos.agregarArtefacto(collar)
+		mockHnos.agregarArtefacto(armadura)
+		mockHnos.agregarArtefacto(armaduraConCota)
+		mockHnos.agregarArtefacto(armaduraBendicion)
+		mockHnos.agregarArtefacto(armaduraHechizo)		
+	}
 	
 	
 	test "conocer precio de alacachula igual a 22" {
@@ -17,52 +35,54 @@ describe "test punto 4" {
 	}
 	
 	test "xenia canjea hechizo basico, cantidad de monedas 22"{
-		xenia.comprar(hechizoBasico)
+		xenia.canjear(hechizoBasico, mockHnos)
 		assert.equals(100,xenia.dinero())
 	}
 
 	test "thor canjea hechizo basico por alacachamula, cantidad de monedas 83"{
-		thor.comprar(alacachula)
+		thor.canjear(alacachula, mockHnos)
 		assert.equals(83,thor.dinero())
 	}
 
 	test "thor canjea dos veces hechizo basico , cantidad de monedas 90"{
-		thor.comprar(hechizoBasico)
-		thor.comprar(hechizoBasico)
+		thor.canjear(hechizoBasico, mockHnos)
+		thor.canjear(hechizoBasico, mockHnos)
 		assert.equals(90,thor.dinero())
 	}
 	
 	test "loki comienza con 5 monedas y no puede comprar alacachamula"{		
-		assert.throwsExceptionLike(new UserException("No hay dinero suficiente"),{loki.comprar(alacachula)})
+		assert.throwsExceptionLike(new UserExceptionNoHayDinero("No hay dinero suficiente"),{loki.canjear(alacachula, mockHnos)})
 	}
 	
 	test "xenia compra artefactos, cantidad de monedas 70"{
-		xenia.comprar(new Arma())
-		xenia.comprar(new CollarDivino())
-		xenia.comprar(new Armadura())
-		xenia.comprar(new Armadura (refuerzo = new CotaDeMalla (bonus = 5)))
-		assert.equals(70.5,xenia.dinero())
-	}
+		xenia.comprar(espada, mockHnos)
+		xenia.comprar(collar, mockHnos)
+		xenia.comprar(armadura, mockHnos)
+		xenia.comprar(armaduraConCota, mockHnos)
+		assert.equals(85.5,xenia.dinero())
+	 }
+	
 	test "cantidad de artefactos igual a 4"{
-		xenia.comprar(new Arma())
-		xenia.comprar(new CollarDivino())
-		xenia.comprar(new Armadura())
-		xenia.comprar(new Armadura (refuerzo = new CotaDeMalla (bonus = 5)))
+		xenia.comprar(espada, mockHnos)
+		xenia.comprar(collar, mockHnos)
+		xenia.comprar(armadura, mockHnos)
+		xenia.comprar(armaduraConCota, mockHnos)
 		assert.equals(4,xenia.artefactos().size())
 	}
 	test "thor compra armaduras con bendicion y hechizo de alacachula, cantidad de monedas = 74"{
-		xenia.comprar(new Armadura(refuerzo = bendicion))
-		xenia.comprar(new Armadura(refuerzo = new Hechizo(hechizo = alacachula)))
+		xenia.comprar(armaduraBendicion, mockHnos)
+		xenia.comprar(armaduraHechizo, mockHnos)
 		assert.equals(74,xenia.dinero())
 	}
 	test "loki comienza con 5 monedas y no puede comprar espejo del fantastico"{		
-		assert.throwsException({loki.comprar(espejoFantastico)})
+		assert.throwsExceptionLike(new UserExceptionNoHayDinero("No hay dinero suficiente"), {loki.comprar(espejoFantastico, mockHnos)})
 	}
 	test "xenia compra libro de hechizos con hechizo basico y alacachula"{
 		const libroDeHechizos = new LibroDeHechizos ()
 		libroDeHechizos.escribirHechizo(hechizoBasico)
 		libroDeHechizos.escribirHechizo(alacachula)
-		xenia.comprar(libroDeHechizos)
+		mockHnos.agregarHechizo(libroDeHechizos)
+		xenia.canjear(libroDeHechizos, mockHnos)
 		assert.equals(69,xenia.dinero())
 	}
 }

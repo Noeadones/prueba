@@ -1,0 +1,61 @@
+import rolando.*
+import hechizos.*
+import fuerzaOscura.*
+import artefactos.*
+import refuerzos.*
+
+describe "test punto 4, entrega 3"{
+
+	const pastoriza = new Comerciante(condicionImpositiva = independiente)
+	const prieto = new Comerciante (condicionImpositiva = registrado)
+	const fermepin = new Comerciante(condicionImpositiva = impuestoALasGanancias)
+	const ursula = new Personaje (pesoMaximo = 200)
+	const mascaraOscura = new MascaraOscura (indice = 1, pesoArtefacto = 3,valorMinimo = 4)
+	
+	fixture {
+		pastoriza.condicionImpositiva().porcentaje(9)
+		fermepin.condicionImpositiva().minimoNoImponible(5)
+		pastoriza.agregarArtefacto(mascaraOscura)
+		prieto.agregarArtefacto(mascaraOscura)
+		fermepin.agregarArtefacto(mascaraOscura)
+	}
+	
+	test "ursula compra mascara oscura a pastoriza = 89,1" {
+		ursula.comprar(mascaraOscura, pastoriza)
+		assert.equals(89.1, ursula.dinero())	
+	}
+	
+	test "ursula compra mascara oscura a prieto = 87,9" {
+		ursula.comprar(mascaraOscura, prieto)
+		assert.equals(87.9, ursula.dinero())	
+	}
+	
+	test "ursula compra mascara oscura a fermepin = 88,25" {
+		ursula.comprar(mascaraOscura, fermepin)
+		assert.equals(88.25, ursula.dinero())	
+	}
+	
+	test "ursula compra mascara oscura a pastoriza recategorizada = 88,2" {
+		pastoriza.recategorizar()
+		ursula.comprar(mascaraOscura, pastoriza)
+		assert.equals(88.2, ursula.dinero())	
+	}
+	
+	test "ursula compra mascara oscura a pastoriza recategorizada 2 veces = 87,9" {
+		pastoriza.recategorizar()
+		pastoriza.recategorizar()
+		ursula.comprar(mascaraOscura, pastoriza)
+		assert.equals(87.9, ursula.dinero())	
+	}
+	
+	test "ursula compra mascara oscura a prieto recategorizado = 88,25" {
+		prieto.recategorizar()
+		ursula.comprar(mascaraOscura, prieto)
+		assert.equals(88.25, ursula.dinero())	
+	}	
+	test "ursula compra mascara oscura a fermepin recategorizado = 88,25" {
+		fermepin.recategorizar()
+		ursula.comprar(mascaraOscura, fermepin)
+		assert.equals(88.25, ursula.dinero())	
+	}
+}

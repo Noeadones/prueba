@@ -1,0 +1,28 @@
+import rolando.*
+import hechizos.*
+import fuerzaOscura.*
+import artefactos.*
+import refuerzos.*
+
+describe "test punto 3, entrega 3"{
+	const navi = new NPC(nivel = facil)
+	const ashleyGraham = new NPC (nivel = moderado, habilidadLuchaBase = 5)
+	const mascaraClara = new MascaraOscura (indice = 0, pesoArtefacto = 2)
+	
+	fixture {
+		ashleyGraham.agregarArtefacto(mascaraClara)
+	}
+	
+	test "nivel lucha de navi = 1" {	
+		assert.equals(1,navi.habilidadLucha())	
+	}
+	
+	test "nivel lucha de ashley con dificultad moderada igual = 18"{
+		assert.equals(18,ashleyGraham.habilidadLucha())
+	}
+	test "nivel lucha de ashley con dificultad dificil igual = 36"{
+		ashleyGraham.nivel(dificil)
+		assert.equals(36,ashleyGraham.habilidadLucha())
+	}
+	
+}
