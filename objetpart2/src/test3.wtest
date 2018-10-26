@@ -6,7 +6,6 @@ import refuerzos.*
 
 describe "test entrega 3 "{
 
-	const hechizoComercial = new HechizoComercial (nombre = "el hechizo comercial", multiplicador = 2)
 	const espectroMalefico = new Logos (nombre = "espectro malefico", multiplicador = 1)
 	const furibunda = new Personaje (hechizoPreferido = hechizoComercial)
 	
